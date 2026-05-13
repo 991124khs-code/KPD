@@ -1129,7 +1129,7 @@
    @media(max-width:1000px){
 
 .logo-overlap{
-  min-width:180px;
+  min-width:250px;
   height:57px;
   display:flex;
   align-items:center;
@@ -1147,32 +1147,38 @@
 .logo-overlap .logo-text{
   margin-left:50px;
   display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:flex-start;
-  gap:2px;
+  flex-direction:row;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
 }
 
 .logo-text strong{
-  font-size:33px;
+  font-size:34px;
   font-weight:1000;
-  letter-spacing:-1px;
-  line-height:0.95;
+  letter-spacing:-2.6px;
+  line-height:1;
   color:#111;
-  -webkit-text-stroke:0.7px #111;
-  text-shadow:0 0 0 #111;
+  -webkit-text-stroke:0;
+  text-shadow:none;
+  transform:scaleX(1.08);
+  transform-origin:left center;
 }
 
 .logo-text strong span{
-  color:#d61f1f;
+  color:#e53935;
+  -webkit-text-stroke:0;
+  text-shadow:none;
 }
 
 .logo-text small{
+  display:inline-block;
   font-size:10px;
-  font-weight:950;
+  font-weight:900;
   color:#666;
   white-space:nowrap;
-  letter-spacing:-0.2px;
+  letter-spacing:-0.6px;
+  margin-top:4px;
 }
       .logo-img{
   width:34px;
