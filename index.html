@@ -555,10 +555,7 @@
     .vote-panel h2{font-size:22px;margin-bottom:16px}
     .vote-buttons{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .vote-btn{border:2px solid #151515;background:#fff;border-radius:20px;padding:22px 14px;font-size:17px;font-weight:950;line-height:1.35}
-    .vote-btn.winner{
-    border-color:#e53935;
-    color:#e53935;
-}
+    
 
     .vote-btn.selected{
     background:#f1f1f1;
@@ -1826,11 +1823,7 @@ function vote(choice){
     document.getElementById("voteA").classList.remove("winner");
     document.getElementById("voteB").classList.remove("winner");
 
-    if(currentPost.ra > currentPost.rb){
-    document.getElementById("voteA").classList.add("winner");
-  }   else {
-    document.getElementById("voteB").classList.add("winner");
-  }
+  
     if(voted[currentPost.title] === "A"){
   document.getElementById("voteA").classList.add("selected");
   }
