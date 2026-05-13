@@ -1,0 +1,2558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>시시비비</title>
+
+  <style>
+  .comment-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:7px;
+}
+
+.category span:first-child,
+.mobile-category span:first-child{
+  min-width:44px;
+  height:24px;
+  border-radius:999px;
+  background:#f0f0f0;
+  color:#555;
+  font-size:10px;
+  font-weight:950;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  letter-spacing:.2px;
+}
+
+.category.active span:first-child,
+.mobile-category.active span:first-child{
+  background:#fff;
+  color:#151515;
+}
+.my-comment-card{
+  background:#fff;
+  border:1px solid #ececec;
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:12px;
+}
+
+.my-comment-topic{
+  font-size:14px;
+  font-weight:950;
+  color:#065fd4;
+  margin-bottom:10px;
+  line-height:1.45;
+}
+
+.my-comment-card p{
+  color:#333;
+  font-size:15px;
+  line-height:1.6;
+  margin-bottom:10px;
+}
+
+.my-comment-meta{
+  color:#777;
+  font-size:13px;
+  font-weight:850;
+}
+
+.like-btn{
+  background:#f2f2f2;
+  border:none;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:13px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:.18s;
+  color:#555;
+}
+
+.voted-label{
+  background:#eef4ff;
+  color:#065fd4;
+  border-radius:18px;
+  padding:15px;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.55;
+  margin-bottom:14px;
+}
+.like-icon{
+  width:17px;
+  height:17px;
+  display:inline-block;
+  background:currentColor;
+  mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 21h4V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13.17 1 6.59 7.59C6.22 7.95 6 8.45 6 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 21h4V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13.17 1 6.59 7.59C6.22 7.95 6 8.45 6 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.like-btn:hover{
+  background:#e9e9e9;
+}
+
+.like-btn.liked{
+  background:#e8f0ff;
+  color:#065fd4;
+}
+
+.like-btn.pop{
+  animation:likePop .28s ease;
+}
+
+@keyframes likePop{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.28)}
+  100%{transform:scale(1)}
+}
+
+.comment-actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:10px;
+}
+
+.comment-actions button{
+  background:#f1f2f4;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:13px;
+  font-weight:850;
+}
+
+.comment-actions button:hover{
+  background:#151515;
+  color:#fff;
+}
+.my-profile-card{
+  background:#fff;
+  border:1px solid #ececec;
+  border-radius:24px;
+  padding:22px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.04);
+}
+
+.my-avatar{
+  width:62px;
+  height:62px;
+  border-radius:20px;
+  background:#151515;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  flex-shrink:0;
+}
+
+.my-info{
+  flex:1;
+}
+
+.my-info h3{
+  font-size:21px;
+  font-weight:950;
+  margin-bottom:6px;
+}
+
+.my-info p{
+  color:#777;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.my-profile-card button{
+  background:#f1f2f4;
+  border-radius:999px;
+  padding:11px 15px;
+  font-size:14px;
+  font-weight:900;
+}
+
+.my-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.my-stats div{
+  background:#fff;
+  border:1px solid #ececec;
+  border-radius:22px;
+  padding:20px 12px;
+  text-align:center;
+}
+
+.my-stats strong{
+  display:block;
+  font-size:26px;
+  font-weight:950;
+  color:#e53935;
+  margin-bottom:6px;
+}
+
+.my-stats span{
+  color:#666;
+  font-size:13px;
+  font-weight:850;
+}
+
+.my-section{
+  background:#fafafa;
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:16px;
+}
+
+.empty-box{
+  background:#fff;
+  border:1px dashed #ddd;
+  border-radius:18px;
+  padding:24px;
+  text-align:center;
+  color:#777;
+  font-size:14px;
+  line-height:1.7;
+  font-weight:800;
+}
+
+.setting-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.setting-list button{
+  width:100%;
+  background:#fff;
+  border:1px solid #ececec;
+  border-radius:18px;
+  padding:16px;
+  text-align:left;
+  font-size:15px;
+  font-weight:900;
+  transition:.18s;
+}
+
+.setting-list button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+@media(max-width:1000px){
+  .my-profile-card{
+    border-radius:20px;
+    padding:18px;
+  }
+
+  .my-stats{
+    grid-template-columns:1fr;
+  }
+}
+
+    *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+    body{
+  background:#f4f5f7;
+  color:#151515;
+  padding-bottom:90px;
+}
+    button{cursor:pointer;border:none;font:inherit;background:none}
+
+    .logo,
+.nav-menu a,
+.search-box,
+.write-btn,
+.category,
+.mobile-category,
+.tabs button,
+.card,
+.list-card,
+.ranking-item,
+.mini-card,
+.keyword-list button,
+.submit-report,
+.back-btn,
+.back-icon,
+.detail-actions button,
+.vote-btn,
+.like-btn,
+.comment-actions button,
+.comment-write button,
+.bottom-btn{
+  cursor:pointer;
+}
+
+.nav-menu a{
+  transition:.18s;
+}
+
+.nav-menu a:hover{
+  color:#e53935;
+}
+    .top-nav{width:100%;background:#fff;border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-index:100}
+   .nav-inner{
+  max-width:1280px;
+  height:72px;
+  margin:0 auto;
+  padding:0 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+    .logo{
+  display:flex;
+
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.logo-overlap{
+  position:relative;
+  gap:0;
+  padding-left:0;
+  min-width:210px;
+}
+
+.logo-symbol{
+  position:absolute;
+  left:-6px;
+  top:50%;
+  width:64px;
+  height:64px;
+  object-fit:cover;
+  transform:translateY(-50%);
+  z-index:0;
+  opacity:.95;
+  pointer-events:none;
+
+  /* 흰 사각형 배경을 화면에서 최대한 제거 */
+  mix-blend-mode:multiply;
+
+  /* 이미지 가장자리를 둥글게 잘라서 사각형 느낌 제거 */
+  border-radius:50%;
+
+  /* 원형 로고 부분만 남기고 가장자리는 자연스럽게 투명 처리 */
+  mask-image:radial-gradient(circle, black 0 58%, rgba(0,0,0,.75) 66%, transparent 78%);
+  -webkit-mask-image:radial-gradient(circle, black 0 58%, rgba(0,0,0,.75) 66%, transparent 78%);
+
+  filter:contrast(1.18) saturate(1.15) drop-shadow(0 5px 9px rgba(0,0,0,.12));
+}
+
+.logo-overlap .logo-text{
+  position:relative;
+  z-index:1;
+  margin-left:42px;
+}
+
+.logo-icon{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#151515,#e53935);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  font-weight:900;
+  box-shadow:0 8px 18px rgba(229,57,53,.25);
+}
+
+.logo-text strong{
+  font-size:30px;
+  font-weight:950;
+  letter-spacing:-2px;
+}
+
+.logo-text strong span{
+  color:#e53935;
+}
+.logo-text span{
+  color:#e53935;
+}
+
+.logo-text small{
+  margin-top:4px;
+  font-size:11px;
+  font-weight:850;
+  color:#777;
+}
+    .logo span{color:#e53935}
+    .nav-menu{display:flex;align-items:center;gap:24px;font-size:15px;font-weight:800;color:#444}
+    .nav-menu a{text-decoration:none;color:inherit}
+    .nav-menu a.active{color:#e53935}
+   .search-box{
+  flex:1;
+  max-width:280px;
+  background:#f1f2f4;
+  border-radius:999px;
+  padding:13px 18px;
+  color:#888;
+  font-size:14px;
+  cursor:pointer;
+}
+    .write-btn{background:#151515;color:#fff;border-radius:999px;padding:12px 18px;font-weight:900;font-size:14px;white-space:nowrap}
+
+    .mobile-categories{display:none;background:#fff;border-bottom:1px solid #eee;padding:10px 12px;gap:8px;overflow-x:auto;position:sticky;top:57px;z-index:90}
+    .mobile-categories::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}
+
+    .screen{display:none}
+    .screen.active{display:block}
+
+    .layout{max-width:1280px;margin:0 auto;padding:28px 32px;display:grid;grid-template-columns:240px minmax(0,1fr)300px;gap:24px}
+    .sidebar,.right-panel{position:sticky;top:96px;height:fit-content}
+    .panel{background:#fff;border:1px solid #ededed;border-radius:24px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.035)}
+    .panel-title{font-size:17px;font-weight:950;margin-bottom:16px}
+    .category-list{display:flex;flex-direction:column;gap:8px}
+    .category,.mobile-category{width:100%;padding:13px 14px;border-radius:16px;text-align:left;font-size:15px;font-weight:850;color:#444;display:flex;align-items:center;gap:10px}
+    .mobile-category{width:auto;flex:0 0 auto;white-space:nowrap;background:#f5f5f6;padding:10px 14px;font-size:14px}
+    .category.active,.mobile-category.active,.category:hover,.mobile-category:hover{background:#151515;color:#fff}
+
+    .hero{background:linear-gradient(135deg,#151515,#343434);color:#fff;border-radius:28px;padding:30px;margin-bottom:22px}
+    .hero-tag{display:inline-block;background:#e53935;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:950;margin-bottom:14px}
+    .hero h1{font-size:34px;line-height:1.22;letter-spacing:-1.5px;margin-bottom:12px}
+    .hero p{color:#ddd;font-size:15px;line-height:1.65}
+
+    .tabs{display:flex;gap:10px;margin-bottom:18px;overflow-x:auto}
+    .tabs button{border:1px solid #e5e5e5;background:#fff;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:850;white-space:nowrap}
+    .tabs button.active{background:#e53935;color:#fff;border-color:#e53935}
+
+    .feed{display:flex;flex-direction:column;gap:16px}
+    .card{background:#fff;border:1px solid #ededed;border-radius:26px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.035);cursor:pointer}
+    .card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(0,0,0,.07)}
+    .card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+    .badge{background:#fff1f1;color:#e53935;padding:6px 11px;border-radius:999px;font-size:13px;font-weight:950;white-space:nowrap}
+    .time{color:#999;font-size:13px;font-weight:750;white-space:nowrap}
+    .card h2{font-size:23px;line-height:1.35;letter-spacing:-.8px;margin-bottom:12px}
+    .story{color:#555;font-size:15px;line-height:1.65;margin-bottom:16px}
+    .locked{background:#f7f7f8;border-radius:18px;padding:15px;font-size:14px;font-weight:850;color:#555;line-height:1.55;margin-bottom:14px}
+    .choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .choices div{border:1px solid #e8e8e8;border-radius:17px;padding:14px;text-align:center;font-size:14px;font-weight:950;background:#fff}
+   .choices div.choice-selected{
+  border:2px solid #e53935;
+  color:#e53935;
+  background:#fff;
+  box-shadow:none;
+  padding:14px;
+  text-align:center;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.choices.voted-choices div{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:14px;
+}
+    .card-meta{
+      display:flex;
+      gap:14px;
+      margin-top:16px;
+      font-size:13px;
+      color:#777;
+      font-weight:700;
+      flex-wrap:wrap;
+    }
+
+    .detail-topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:#f4f5f7;
+      padding:10px 0 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .detail-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .back-icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:#151515;
+      color:#fff;
+      font-size:20px;
+      font-weight:900;
+    }
+
+    .detail-page-title{
+      font-size:20px;
+      font-weight:950;
+      letter-spacing:-0.8px;
+    }
+
+    .detail-actions{
+      display:flex;
+      gap:10px;
+    }
+
+    .detail-actions button{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid #e8e8e8;
+      font-size:18px;
+    }
+
+    .icon-btn{
+  position:relative;
+}
+
+.icon-btn::before{
+  content:"";
+  width:19px;
+  height:19px;
+  display:block;
+  margin:auto;
+  background:#151515;
+}
+
+.share-icon::before{
+  mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18 16.1c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11A2.99 2.99 0 1015 5c0 .24.04.47.09.7L8.04 9.81A3 3 0 106 15c.76 0 1.44-.3 1.96-.77l7.12 4.18c-.05.2-.08.42-.08.64a3 3 0 103-2.95z'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18 16.1c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11A2.99 2.99 0 1015 5c0 .24.04.47.09.7L8.04 9.81A3 3 0 106 15c.76 0 1.44-.3 1.96-.77l7.12 4.18c-.05.2-.08.42-.08.64a3 3 0 103-2.95z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.report-icon::before{
+  mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+    .detail-wrap{max-width:900px;margin:0 auto;padding:32px}
+    .back-btn{background:#151515;color:#fff;border-radius:999px;padding:11px 18px;font-weight:900;margin-bottom:18px}
+    .detail-card{background:#fff;border-radius:28px;border:1px solid #ededed;padding:30px;box-shadow:0 8px 24px rgba(0,0,0,.04)}
+    .detail-card h1{font-size:34px;line-height:1.3;letter-spacing:-1.3px;margin:18px 0 12px}
+    .meta{color:#888;font-size:14px;font-weight:750;margin-bottom:20px}
+    .full-story{background:#fafafa;border-radius:20px;padding:20px;font-size:16px;line-height:1.75;color:#333;margin-bottom:22px}
+    .vote-panel{border:1px solid #eee;border-radius:24px;padding:22px;margin-bottom:22px}
+    .vote-panel h2{font-size:22px;margin-bottom:16px}
+    .vote-buttons{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .vote-btn{border:2px solid #151515;background:#fff;border-radius:20px;padding:22px 14px;font-size:17px;font-weight:950;line-height:1.35}
+    .vote-btn.winner{
+    border-color:#e53935;
+    color:#e53935;
+}
+
+    .vote-btn.selected{
+    background:#f1f1f1;
+    transform:scale(.98);
+    position:relative;
+}
+
+    .vote-btn.selected::after{
+    content:"✔";
+    position:absolute;
+    top:10px;
+    right:14px;
+    font-size:18px;
+    font-weight:900;
+    color:#151515;
+}
+    .before-vote{background:#fff7e6;border:1px solid #ffd88a;color:#7a4b00;border-radius:18px;padding:16px;margin-top:16px;font-size:14px;line-height:1.55;font-weight:850}
+    .result-area,.comment-area{display:none;margin-top:22px}
+    .show{display:block!important}
+    .result-title,.comment-title{font-size:21px;font-weight:950;margin-bottom:14px}
+    .result-row{margin-bottom:16px}
+    .result-top{display:flex;justify-content:space-between;font-size:15px;font-weight:950;margin-bottom:7px}
+    .bar{height:14px;background:#e5e5e5;border-radius:999px;overflow:hidden}
+    .fill{height:100%;width:0;background:#151515;border-radius:999px;transition:.6s}
+    .fill.red{background:#e53935}
+    .comment{background:#fafafa;border:1px solid #eee;border-radius:18px;padding:16px;margin-bottom:12px}
+    .comment strong{display:block;margin-bottom:7px;font-size:14px}
+    .comment p{font-size:15px;color:#444;line-height:1.55}
+    .comment-write{display:flex;gap:10px;margin-top:14px}
+    .comment-write input{flex:1;border:1px solid #ddd;border-radius:999px;padding:14px 16px;font-size:15px;outline:none}
+    .comment-write button{background:#151515;color:#fff;border-radius:999px;padding:0 18px;font-weight:900}
+
+    .toast{display:none;position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#151515;color:#fff;border-radius:999px;padding:14px 22px;font-size:14px;font-weight:850;z-index:999;text-align:center}
+    .toast.show{display:block}
+    .report-card{
+  background:#fff;
+  border:1px solid #eeeeee;
+  border-radius:28px;
+  padding:28px;
+  box-shadow:0 12px 34px rgba(0,0,0,.06);
+}
+
+.report-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  margin-bottom:24px;
+}
+
+.html-badge{
+  display:inline-block;
+  background:#fff1f1;
+  color:#e53935;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:12px;
+  font-weight:950;
+  margin-bottom:12px;
+}
+
+.report-head h2{
+  font-size:28px;
+  font-weight:950;
+  letter-spacing:-1px;
+  margin-bottom:8px;
+}
+
+.report-head p{
+  color:#777;
+  font-size:15px;
+  line-height:1.5;
+}
+
+.report-step{
+  background:#151515;
+  color:#fff;
+  border-radius:999px;
+  padding:8px 13px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.report-grid{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:14px;
+  margin-bottom:14px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+.form-group label{
+  font-size:14px;
+  font-weight:950;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select,
+.choice-card input{
+  width:100%;
+  border:1px solid #dddddd;
+  background:#fafafa;
+  border-radius:16px;
+  padding:15px 16px;
+  font-size:15px;
+  outline:none;
+  transition:.18s;
+}
+.choice-card input:disabled{
+  background:#eeeeee;
+  color:#777;
+  cursor:not-allowed;
+  font-weight:850;
+}
+
+.form-group textarea{
+  min-height:180px;
+  resize:none;
+  line-height:1.65;
+}
+
+.choice-card-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:8px;
+}
+
+.choice-card{
+  border:1px solid #eeeeee;
+  border-radius:22px;
+  padding:18px;
+  background:#fafafa;
+}
+
+.choice-badge{
+  display:inline-block;
+  background:#fff1f1;
+  color:#e53935;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+  font-weight:950;
+  margin-bottom:12px;
+}
+
+.choice-badge.dark{
+  background:#eeeeee;
+  color:#151515;
+}
+
+.report-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-top:22px;
+}
+.upload-box{
+  border:1px dashed #d7d7d7;
+  background:#fafafa;
+  border-radius:22px;
+  padding:18px;
+  margin-top:16px;
+}
+
+.upload-title{
+  font-size:14px;
+  font-weight:950;
+  margin-bottom:10px;
+}
+
+.upload-desc{
+  font-size:13px;
+  color:#777;
+  line-height:1.5;
+  margin-bottom:14px;
+}
+
+.file-input{
+  display:none;
+}
+
+.file-label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#151515;
+  color:#fff;
+  border-radius:999px;
+  padding:12px 16px;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.file-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:14px;
+}
+
+.file-chip{
+  background:#fff;
+  border:1px solid #e8e8e8;
+  border-radius:999px;
+  padding:9px 12px;
+  font-size:13px;
+  font-weight:850;
+  color:#444;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.file-chip button{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#151515;
+  color:#fff;
+  font-size:12px;
+  line-height:18px;
+}
+
+.detail-attachments{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.attachment-card{
+  background:#fafafa;
+  border:1px solid #ededed;
+  border-radius:18px;
+  padding:14px;
+}
+
+.attachment-card img,
+.attachment-card video{
+  width:100%;
+  max-height:260px;
+  object-fit:cover;
+  border-radius:14px;
+  display:block;
+}
+
+.attachment-card audio{
+  width:100%;
+}
+
+.attachment-name{
+  margin-top:10px;
+  font-size:13px;
+  color:#666;
+  font-weight:850;
+}
+.report-guide{
+  color:#777;
+  font-size:14px;
+  font-weight:750;
+}
+
+.submit-report{
+  background:#151515;
+  color:#fff;
+  border-radius:18px;
+  padding:16px 24px;
+  font-size:16px;
+  font-weight:950;
+  transition:.18s;
+}
+
+.submit-report:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(0,0,0,.18);
+}
+
+.submit-report:active{
+  transform:scale(.96);
+}
+.search-page{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+.search-header{
+  display:flex;
+  gap:12px;
+}
+
+.real-search{
+  flex:1;
+  height:58px;
+  border:none;
+  background:#f4f5f7;
+  border-radius:18px;
+  padding:0 20px;
+  font-size:16px;
+  outline:none;
+}
+
+.search-btn{
+  background:#151515;
+  color:#fff;
+  border-radius:18px;
+  padding:0 24px;
+  font-size:15px;
+  font-weight:950;
+  transition:.18s;
+}
+
+.search-btn:hover{
+  transform:translateY(-2px);
+}
+
+.search-btn:active{
+  transform:scale(.96);
+}
+
+.keyword-wrap,
+.search-recent{
+  background:#fafafa;
+  border-radius:22px;
+  padding:22px;
+}
+
+.keyword-title{
+  font-size:18px;
+  font-weight:950;
+  margin-bottom:16px;
+}
+
+.keyword-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.keyword-list button{
+  background:#fff;
+  border:1px solid #e8e8e8;
+  border-radius:999px;
+  padding:11px 16px;
+  font-size:14px;
+  font-weight:850;
+  transition:.18s;
+}
+
+.keyword-list button:hover{
+  background:#151515;
+  color:#fff;
+}
+
+.keyword-list button:active{
+  transform:scale(.95);
+}
+
+.mini-card{
+  background:#fff;
+  border:1px solid #ededed;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:12px;
+  font-size:15px;
+  font-weight:850;
+  transition:.18s;
+  cursor:pointer;
+}
+
+.mini-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.mini-card:active{
+  transform:scale(.98);
+}
+
+.mini-card span{
+  display:inline-block;
+  margin-right:10px;
+}
+.page-hero{
+  background:linear-gradient(135deg,#151515,#343434);
+  color:#fff;
+  border-radius:26px;
+  padding:26px;
+  margin-bottom:22px;
+}
+
+.page-hero .page-badge{
+  display:inline-block;
+  background:#e53935;
+  border-radius:999px;
+  padding:6px 11px;
+  font-size:12px;
+  font-weight:950;
+  margin-bottom:12px;
+}
+
+.page-hero h2{
+  font-size:30px;
+  font-weight:950;
+  letter-spacing:-1px;
+  margin-bottom:8px;
+}
+
+.page-hero p{
+  color:#ddd;
+  font-size:15px;
+  line-height:1.6;
+}
+
+.list-page{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+
+.list-card{
+  background:#fff;
+  border:1px solid #ececec;
+  border-radius:24px;
+  padding:22px;
+  transition:.18s;
+  cursor:pointer;
+}
+
+.list-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(0,0,0,.08);
+}
+
+.list-card:active{
+  transform:scale(.99);
+}
+
+.list-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.list-rank{
+  color:#e53935;
+  font-size:13px;
+  font-weight:950;
+}
+
+.list-time{
+  color:#888;
+  font-size:13px;
+  font-weight:850;
+}
+
+.list-card h3{
+  font-size:23px;
+  line-height:1.4;
+  margin-bottom:12px;
+  letter-spacing:-0.8px;
+}
+
+.list-card p{
+  color:#666;
+  line-height:1.6;
+  margin-bottom:14px;
+}
+
+.list-meta{
+  color:#777;
+  font-size:14px;
+  font-weight:850;
+}
+
+.ranking-page{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.ranking-item{
+  background:#fff;
+  border:1px solid #ececec;
+  border-radius:22px;
+  padding:20px;
+  display:flex;
+  gap:18px;
+  align-items:center;
+}
+
+.ranking-number{
+  width:54px;
+  height:54px;
+  border-radius:18px;
+  background:#151515;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:950;
+  flex-shrink:0;
+}
+
+.ranking-title{
+  font-size:18px;
+  font-weight:950;
+  margin-bottom:6px;
+  line-height:1.4;
+}
+
+.ranking-info{
+  color:#777;
+  font-size:14px;
+  font-weight:800;
+}
+    .mobile-bottom-nav{
+    display:none;
+}
+
+.nav-icon,
+.plus-icon{
+  width:22px;
+  height:22px;
+  display:block;
+  background:currentColor;
+}
+
+.home-icon{
+  mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 10.5 12 4l8 6.5V20h-5v-5H9v5H4v-9.5z'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 10.5 12 4l8 6.5V20h-5v-5H9v5H4v-9.5z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.hot-icon{
+  mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13 2C9 6 15 8 10.5 12c-1.6 1.4-2.5 2.7-2.5 4.4A4.9 4.9 0 0 0 13 21a5 5 0 0 0 5-5c0-3.4-2.4-5.2-3.7-7.1C13.3 7.5 13 5.8 13 2z'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13 2C9 6 15 8 10.5 12c-1.6 1.4-2.5 2.7-2.5 4.4A4.9 4.9 0 0 0 13 21a5 5 0 0 0 5-5c0-3.4-2.4-5.2-3.7-7.1C13.3 7.5 13 5.8 13 2z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.vote-icon{
+  mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 4h14v4H5V4zm0 6h14v4H5v-4zm0 6h14v4H5v-4z'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 4h14v4H5V4zm0 6h14v4H5v-4zm0 6h14v4H5v-4z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.user-icon{
+  mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7 8c.5-4 3.5-6 7-6s6.5 2 7 6H5z'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7 8c.5-4 3.5-6 7-6s6.5 2 7 6H5z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.plus-icon{
+  width:28px;
+  height:28px;
+  background:#fff;
+  mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 5h2v14h-2V5zm-6 6h14v2H5v-2z'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 5h2v14h-2V5zm-6 6h14v2H5v-2z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+   @media(max-width:1000px){
+
+.logo-overlap{
+  min-width:180px;
+  height:57px;
+  display:flex;
+  align-items:center;
+  position:relative;
+}
+
+.logo-symbol{
+  width:42px;
+  height:42px;
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.logo-overlap .logo-text{
+  margin-left:50px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.logo-text strong{
+  font-size:30px;
+  font-weight:950;
+  letter-spacing:-1px;
+  line-height:1;
+  text-shadow:0 0 0 #151515;
+}
+
+.logo-text small{
+  font-size:10px;
+  font-weight:900;
+  white-space:nowrap;
+}
+      .logo-img{
+  width:34px;
+  height:34px;
+}
+     body{
+    padding-bottom:90px;
+}
+      .nav-inner{height:57px;padding:0 14px;gap:10px}
+      .logo{font-size:25px}
+      .nav-menu,.search-box{display:none}
+      .write-btn{padding:10px 13px;font-size:13px}
+      .mobile-categories{display:flex}
+      .layout{display:block;padding:14px 12px}
+      .sidebar,.right-panel{display:none}
+      .hero{border-radius:22px;padding:20px;margin-bottom:14px}
+      .hero h1{font-size:24px}
+      .hero p{font-size:14px}
+      .tabs button{padding:9px 13px;font-size:13px}
+      .card{border-radius:22px;padding:16px}
+      .card:hover{transform:none}
+      .card h2{font-size:19px}
+      .story{font-size:14px}
+      .choices{grid-template-columns:1fr;gap:8px}
+      .detail-wrap{padding:14px 12px}
+      .detail-card{border-radius:22px;padding:18px}
+      .detail-card h1{font-size:24px}
+      .vote-buttons{grid-template-columns:1fr}
+      .comment-write{flex-direction:column}
+      .comment-write button{height:46px}
+      .logo-icon{
+  width:36px;
+  height:36px;
+  border-radius:12px;
+  font-size:20px;
+}
+
+.logo-text strong{
+  font-size:30px;
+  font-weight:950;
+  letter-spacing:-1px;
+  line-height:1;
+}
+
+.logo-text small{
+  display:inline-block;
+  font-size:10px;
+  font-weight:900;
+  color:#777;
+  white-space:nowrap;
+}
+.mobile-bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:72px;
+  background:#fff;
+  border-top:1px solid #e8e8e8;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:999;
+}
+
+.bottom-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  font-size:11px;
+  font-weight:800;
+  color:#777;
+  width:20%;
+  height:100%;
+}
+
+
+.bottom-btn.active{
+  color:#e53935;
+}
+
+.center-btn{
+  transform:translateY(-18px);
+  background:#e53935;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  color:#fff !important;
+  box-shadow:0 10px 22px rgba(229,57,53,.35);
+}
+
+
+.detail-topbar{
+  padding:4px 0 14px;
+}
+
+.detail-page-title{
+  font-size:17px;
+}
+
+.back-icon,
+.detail-actions button{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+}
+.report-card{
+  border-radius:22px;
+  padding:18px;
+}
+
+.report-head{
+  flex-direction:column;
+  gap:12px;
+}
+
+.report-head h2{
+  font-size:23px;
+}
+
+.report-grid{
+  grid-template-columns:1fr;
+}
+
+.choice-card-wrap{
+  grid-template-columns:1fr;
+}
+
+.report-bottom{
+  flex-direction:column;
+  align-items:stretch;
+}
+
+.submit-report{
+  width:100%;
+}
+.search-header{
+  flex-direction:column;
+}
+
+.search-btn{
+  height:52px;
+}
+
+.keyword-wrap,
+.search-recent{
+  padding:18px;
+}
+
+.page-hero{
+  border-radius:22px;
+  padding:20px;
+}
+.page-hero h2{
+  font-size:23px;
+}
+
+.list-card{
+  border-radius:20px;
+  padding:18px;
+}
+
+.list-card h3{
+  font-size:20px;
+}
+
+.ranking-item{
+  padding:16px;
+  border-radius:18px;
+}
+
+.ranking-number{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  font-size:18px;
+}
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="top-nav">
+  <div class="nav-inner">
+<div class="logo logo-overlap" onclick="goHome()">
+
+  <img src="logo.png" class="logo-symbol">
+
+  <div class="logo-text">
+    <strong>ㅅㅅ<span>ㅂㅂ</span></strong>
+    <small>국민 판결 커뮤니티</small>
+  </div>
+
+</div>
+
+    <div class="nav-menu">
+      <a class="active" onclick="goHome()">홈</a>
+      <a onclick="openPage('인기논쟁')">인기논쟁</a>
+      <a onclick="openPage('최신투표')">최신투표</a>
+      <a onclick="openPage('랭킹')">랭킹</a>
+      <a onclick="openPage('마이페이지')">마이페이지</a>
+    </div>
+
+    <div class="search-box" onclick="openPage('검색')">갈등, 사건, 키워드를 검색해보세요</div>
+    <button class="write-btn" onclick="openPage('제보하기')">제보하기</button>
+  </div>
+</nav>
+
+<div class="mobile-categories" id="mobileCategoryList"></div>
+
+<section id="homeScreen" class="screen active">
+  <section class="layout">
+    <aside class="sidebar">
+      <div class="panel">
+        <div class="panel-title">갈등 카테고리</div>
+        <div class="category-list" id="categoryList"></div>
+      </div>
+    </aside>
+
+    <main>
+      <section class="hero">
+        <div class="hero-tag">오늘의 시비</div>
+        <h1>당신의 판결은?</h1>
+        <p>댓글과 득표율은 투표 전까지 공개되지 않습니다. 먼저 본인의 판결을 내려보세요.</p>
+      </section>
+
+      <section class="tabs">
+        <button class="active" onclick="setTab(this,'인기순')">인기순</button>
+        <button onclick="setTab(this,'최신순')">최신순</button>
+        <button onclick="setTab(this,'댓글 많은 순')">댓글 많은 순</button>
+        <button onclick="setTab(this,'마감 임박')">마감 임박</button>
+      </section>
+
+      <section class="feed" id="feed"></section>
+    </main>
+
+    <aside class="right-panel">
+      <div class="panel">
+       <div class="panel-title">실시간 인기 논쟁</div>
+        <div class="feed" id="rankFeed"></div>
+      </div>
+    </aside>
+  </section>
+</section>
+
+<section id="detailScreen" class="screen">
+    <div class="detail-wrap">
+    <div class="detail-topbar">
+
+    <div class="detail-left">
+      <button class="back-icon" onclick="goHome()">←</button>
+      <div class="detail-page-title">시시비비 판결</div>
+    </div>
+
+   <div class="detail-actions">
+  <button class="icon-btn share-icon" onclick="showToast('공유 기능 준비중')"></button>
+  <button class="icon-btn report-icon" onclick="showToast('신고 접수 완료')"></button>
+</div>
+
+    </div>
+    <article class="detail-card">
+      <span class="badge" id="detailBadge"></span>
+      <h1 id="detailTitle"></h1>
+      <div class="meta" id="detailMeta"></div>
+      <div class="full-story" id="detailStory"></div>
+      <div id="detailAttachments" class="detail-attachments"></div>
+
+      <section class="vote-panel">
+        <h2>당신의 판결은?</h2>
+        <div class="vote-buttons">
+         <button class="vote-btn" id="voteA" onclick="vote('A')"></button>
+          <button class="vote-btn" id="voteB" onclick="vote('B')"></button>
+        </div>
+
+        <div id="beforeVote" class="before-vote">
+          투표하기 전에는 득표율과 댓글을 볼 수 없습니다.
+        </div>
+
+        <div id="resultArea" class="result-area">
+          <div class="result-title">실시간 득표율</div>
+
+          <div class="result-row">
+            <div class="result-top"><span id="resultAText"></span><span id="resultAPercent"></span></div>
+            <div class="bar"><div class="fill red" id="barA"></div></div>
+          </div>
+
+          <div class="result-row">
+            <div class="result-top"><span id="resultBText"></span><span id="resultBPercent"></span></div>
+            <div class="bar"><div class="fill" id="barB"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="commentArea" class="comment-area">
+        <div class="comment-title">댓글 전쟁</div>
+        <div id="comments"></div>
+
+        <div class="comment-write">
+          <input id="commentInput" placeholder="내 의견을 댓글로 남겨보세요" />
+          <button onclick="addComment()">등록</button>
+        </div>
+      </section>
+    </article>
+  </div>
+</section>
+
+<section id="pageScreen" class="screen">
+  <div class="detail-wrap">
+    <button class="back-btn" onclick="goHome()">← 홈으로</button>
+    <article class="detail-card">
+      <span class="badge">페이지</span>
+      <h1 id="pageTitle"></h1>
+      <div class="full-story" id="pageText"></div>
+    </article>
+  </div>
+</section>
+
+<nav class="mobile-bottom-nav">
+
+  <button class="bottom-btn active" onclick="goHome()">
+    <div class="nav-icon home-icon"></div>
+    홈
+  </button>
+
+  <button class="bottom-btn" onclick="openPage('인기논쟁')">
+    <div class="nav-icon hot-icon"></div>
+    인기
+  </button>
+
+  <button class="bottom-btn center-btn" onclick="openPage('제보하기')">
+    <div class="plus-icon"></div>
+  </button>
+
+  <button class="bottom-btn" onclick="openPage('최신투표')">
+    <div class="nav-icon vote-icon"></div>
+    투표
+  </button>
+
+  <button class="bottom-btn" onclick="openPage('마이페이지')">
+    <div class="nav-icon user-icon"></div>
+    내정보
+  </button>
+
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const categories = [
+  ["전체", "ALL"], 
+  ["교통", "CAR"], 
+  ["연애", "LOVE"], 
+  ["가족", "FAM"],
+  ["직장", "WORK"], 
+  ["이웃", "HOME"], 
+  ["사회", "ISSUE"], 
+  ["사건", "CASE"]
+];
+
+  const posts = [
+    {
+      category:"교통", badge:"교통", time:"12분 전", votes:"18,294",
+      title:"깜빡이 없이 끼어든 차 vs 일부러 안 비켜준 차",
+      story:"출근길 정체 구간에서 A차량이 깜빡이 없이 급하게 끼어들었고 B차량은 일부러 간격을 좁혀 양보하지 않았습니다.",
+      a:"끼어든 차가 잘못", b:"안 비켜준 차가 잘못", ra:57, rb:43,
+      comments:["깜빡이 없이 들어온 순간부터 문제입니다.","일부러 막는 것도 사고 유발입니다."]
+    },
+    {
+      category:"연애", badge:"연애", time:"31분 전", votes:"32,901",
+      title:"남사친과 단둘이 술 마신 여자친구",
+      story:"여자친구는 오래 알고 지낸 친구라 괜찮다고 하고 남자친구는 배려 부족이라고 말합니다.",
+      a:"여자친구가 배려 부족", b:"남자친구가 예민함", ra:62, rb:38,
+      comments:["단둘이 술은 선 넘었다고 봅니다.","미리 말했으면 신뢰 문제 아닌가요?"]
+    },
+    {
+      category:"직장", badge:"직장", time:"1시간 전", votes:"21,409",
+      title:"퇴근 직전 업무 지시한 상사",
+      story:"상사는 급한 일이라고 하고 직원은 퇴근 직전 지시는 무리라고 합니다.",
+      a:"상사가 무리", b:"직원이 책임감 부족", ra:69, rb:31,
+      comments:["퇴근 10분 전 지시는 너무합니다.","상사가 더 일찍 말했어야죠."]
+    }
+  ];
+
+let currentPost = null;
+let selectedFiles = [];
+
+let currentCategory = "전체";
+let currentSort = "인기순";
+
+let voted = JSON.parse(localStorage.getItem("votedPosts") || "{}");
+let likedComments = JSON.parse(localStorage.getItem("likedComments") || "{}");
+
+function saveVotes(){
+  localStorage.setItem("votedPosts", JSON.stringify(voted));
+}
+
+function savePosts(){
+  localStorage.setItem("siseebeePosts", JSON.stringify(posts));
+  localStorage.setItem("likedComments", JSON.stringify(likedComments));
+}
+function loadPosts(){
+  const saved = JSON.parse(localStorage.getItem("siseebeePosts") || "null");
+
+  if(saved){
+    posts.length = 0;
+    saved.forEach(p => posts.push(p));
+  }
+
+  posts.forEach(post=>{
+    if(!post.attachments) post.attachments = [];
+
+    if(typeof post.mine === "undefined"){
+      post.mine = false;
+    }
+
+    if(typeof post.views === "undefined"){
+      post.views = 0;
+    }
+
+    if(!post.createdAt){
+      post.createdAt = Date.now();
+    }
+
+    post.comments = post.comments.map((c,i)=>{
+      if(typeof c === "string"){
+        return {
+          id: post.title + "_old_" + i,
+          writer: "익명",
+          text: c,
+          likes: 0,
+          mine: false
+        };
+      }
+
+      if(!c.id){
+        c.id = post.title + "_" + i + "_" + Date.now();
+      }
+
+      return c;
+    });
+  });
+}
+
+  function init(){
+    renderCategories();
+    renderFeed("전체");
+    renderRank();
+  }
+
+  function renderCategories(){
+    const desktop = document.getElementById("categoryList");
+    const mobile = document.getElementById("mobileCategoryList");
+
+    const html = categories.map((c,i)=>`
+      <button class="${desktop ? 'category' : ''} ${i===0?'active':''}" onclick="selectCategory('${c[0]}')">
+        <span>${c[1]}</span><span>${c[0]}</span>
+      </button>
+    `).join("");
+
+    desktop.innerHTML = categories.map((c,i)=>`
+      <button class="category ${i===0?'active':''}" onclick="selectCategory('${c[0]}')">
+        <span>${c[1]}</span><span>${c[0]}</span>
+      </button>
+    `).join("");
+
+    mobile.innerHTML = categories.map((c,i)=>`
+      <button class="mobile-category ${i===0?'active':''}" onclick="selectCategory('${c[0]}')">
+        <span>${c[1]}</span><span>${c[0]}</span>
+      </button>
+    `).join("");
+  }
+
+  function selectCategory(category){
+    document.querySelectorAll(".category,.mobile-category").forEach(btn=>{
+      btn.classList.remove("active");
+      if(btn.innerText.includes(category)) btn.classList.add("active");
+    });
+
+    showScreen("homeScreen");
+    currentCategory = category;
+renderFeed(category);
+    showToast(category + " 카테고리");
+  }
+
+  function renderFeed(category = currentCategory){
+  currentCategory = category;
+
+  let list = category === "전체" ? [...posts] : posts.filter(p => p.category === category);
+
+  if(currentSort === "인기순"){
+    list.sort((a,b)=> Number(String(b.votes).replace(/,/g,"")) - Number(String(a.votes).replace(/,/g,"")));
+  }
+
+  if(currentSort === "최신순"){
+    list.sort((a,b)=> (b.createdAt || 0) - (a.createdAt || 0));
+  }
+
+  if(currentSort === "댓글 많은 순"){
+    list.sort((a,b)=> b.comments.length - a.comments.length);
+  }
+
+  if(currentSort === "마감 임박"){
+    // 아직 마감시간 기능이 없으니까 임시로 최신순과 비슷하게 처리
+    list.sort((a,b)=> (b.createdAt || 0) - (a.createdAt || 0));
+  }
+
+  const feed = document.getElementById("feed");
+
+  feed.innerHTML = list.map((post)=>`
+    <article class="card" onclick="openDetail(${posts.indexOf(post)})">
+      <div class="card-top">
+        <span class="badge">${post.badge}</span>
+        <span class="time">${post.time}</span>
+      </div>
+
+      <h2>${post.title}</h2>
+      <p class="story">${post.story}</p>
+
+      ${!voted[post.title] ? `
+  <div class="locked">
+    투표 전 비공개<br>득표율과 댓글은 먼저 투표해야 볼 수 있습니다.
+  </div>
+` : ""}
+
+<div class="choices ${voted[post.title] ? "voted-choices" : ""}">
+  <div class="${voted[post.title] === "A" ? "choice-selected" : ""}">
+    ${post.a}
+  </div>
+  <div class="${voted[post.title] === "B" ? "choice-selected" : ""}">
+    ${post.b}
+  </div>
+</div>
+
+      <div class="card-meta">
+        <span>${post.votes}명 참여</span>
+        <span>${post.comments.length}개 댓글</span>
+        <span>조회 ${post.views || 0}</span>
+        <span>${post.time}</span>
+      </div>
+    </article>
+  `).join("") || `
+    <article class="card">
+      <h2>아직 등록된 논쟁이 없습니다.</h2>
+      <p class="story">첫 번째 시비를 제보해보세요.</p>
+    </article>
+  `;
+}
+
+
+  function renderRank(){
+    document.getElementById("rankFeed").innerHTML = posts.map((p,i)=>`
+      <article class="card" onclick="openDetail(${i})">
+        <div class="badge">${i+1}위</div>
+        <h2>${p.title}</h2>
+        <p class="story">${p.votes}명 참여</p>
+      </article>
+    `).join("");
+  }
+
+  function openDetail(index){
+    currentPost = posts[index];
+    currentPost.views = (currentPost.views || 0) + 1;
+savePosts();
+
+    document.getElementById("detailBadge").textContent = currentPost.badge;
+    document.getElementById("detailTitle").textContent = currentPost.title;
+    document.getElementById("detailMeta").textContent = `${currentPost.time} · ${currentPost.votes}명 참여`;
+    document.getElementById("detailStory").textContent = currentPost.story;
+    renderDetailAttachments();
+    document.getElementById("voteA").textContent = currentPost.a;
+    document.getElementById("voteB").textContent = currentPost.b;
+
+    document.getElementById("voteA").classList.remove("winner","selected");
+    document.getElementById("voteB").classList.remove("winner","selected");
+
+    document.getElementById("beforeVote").style.display = "block";
+    document.getElementById("resultArea").classList.remove("show");
+    document.getElementById("commentArea").classList.remove("show");
+    document.getElementById("barA").style.width = "0";
+    document.getElementById("barB").style.width = "0";
+
+    if(voted[currentPost.title]) revealResult();
+
+    showScreen("detailScreen");
+  }
+  function renderDetailAttachments(){
+  const area = document.getElementById("detailAttachments");
+  if(!area || !currentPost) return;
+
+  const files = currentPost.attachments || [];
+
+  if(files.length === 0){
+    area.innerHTML = "";
+    return;
+  }
+
+  area.innerHTML = files.map(file=>{
+    if(file.type.startsWith("image/")){
+      return `
+        <div class="attachment-card">
+          <img src="${file.dataUrl}" alt="${file.name}">
+          <div class="attachment-name">${file.name}</div>
+        </div>
+      `;
+    }
+
+    if(file.type.startsWith("audio/")){
+      return `
+        <div class="attachment-card">
+          <audio controls src="${file.dataUrl}"></audio>
+          <div class="attachment-name">${file.name}</div>
+        </div>
+      `;
+    }
+
+    if(file.type.startsWith("video/")){
+      return `
+        <div class="attachment-card">
+          <video controls src="${file.dataUrl}"></video>
+          <div class="attachment-name">${file.name}</div>
+        </div>
+      `;
+    }
+
+    return "";
+  }).join("");
+}
+
+function vote(choice){
+  if(!currentPost) return;
+
+  if(voted[currentPost.title]){
+    showToast("이미 투표를 하였습니다.");
+    return;
+  }
+
+  voted[currentPost.title] = choice;
+  saveVotes();
+
+  revealResult();
+  renderFeed("전체");
+  renderRank();
+
+  showToast("판결이 완료되었습니다.");
+}
+
+  function revealResult(){
+    document.getElementById("beforeVote").style.display = "none";
+    document.getElementById("resultArea").classList.add("show");
+    document.getElementById("commentArea").classList.add("show");
+
+    document.getElementById("resultAText").textContent = currentPost.a;
+    document.getElementById("resultBText").textContent = currentPost.b;
+    document.getElementById("resultAPercent").textContent = currentPost.ra + "%";
+    document.getElementById("resultBPercent").textContent = currentPost.rb + "%";
+    document.getElementById("voteA").classList.remove("winner");
+    document.getElementById("voteB").classList.remove("winner");
+
+    if(currentPost.ra > currentPost.rb){
+    document.getElementById("voteA").classList.add("winner");
+  }   else {
+    document.getElementById("voteB").classList.add("winner");
+  }
+    if(voted[currentPost.title] === "A"){
+  document.getElementById("voteA").classList.add("selected");
+  }
+
+    if(voted[currentPost.title] === "B"){
+  document.getElementById("voteB").classList.add("selected");
+  }
+    setTimeout(()=>{
+      document.getElementById("barA").style.width = currentPost.ra + "%";
+      document.getElementById("barB").style.width = currentPost.rb + "%";
+    },100);
+
+    renderComments();
+  }
+
+  function addComment(){
+  const input = document.getElementById("commentInput");
+  const text = input.value.trim();
+
+  if(!voted[currentPost.title]){
+    showToast("댓글은 투표 후 작성 가능합니다.");
+    return;
+  }
+
+  if(!text) return;
+
+  currentPost.comments.unshift({
+    id: "my_" + Date.now(),
+    writer: "나",
+    text: text,
+    likes: 0,
+    mine: true
+  });
+
+  input.value = "";
+  savePosts();
+  renderComments();
+  showToast("댓글 등록 완료");
+}
+  function renderComments(){
+  document.getElementById("comments").innerHTML = currentPost.comments.map((c,i)=>{
+    const isLiked = likedComments[c.id];
+
+    return `
+      <div class="comment">
+        <div class="comment-head">
+          <strong>${c.writer}</strong>
+
+          <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="likeComment(${i}, this)">
+            <span class="like-icon"></span>
+            <span>${c.likes}</span>
+          </button>
+        </div>
+
+        <p>${c.text}</p>
+
+        <div class="comment-actions">
+          ${c.mine ? `<button onclick="editComment(${i})">수정</button>` : ""}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function likeComment(index, btn){
+  const comment = currentPost.comments[index];
+
+  if(likedComments[comment.id]){
+    comment.likes--;
+    delete likedComments[comment.id];
+    showToast("좋아요를 취소했습니다.");
+  } else {
+    comment.likes++;
+    likedComments[comment.id] = true;
+
+    btn.classList.add("pop");
+    setTimeout(()=>btn.classList.remove("pop"), 280);
+
+    showToast("좋아요를 눌렀습니다.");
+  }
+
+  savePosts();
+  renderComments();
+}
+
+function editComment(index){
+  const oldText = currentPost.comments[index].text;
+  const newText = prompt("댓글을 수정하세요.", oldText);
+
+  if(newText === null) return;
+  if(!newText.trim()){
+    showToast("댓글 내용을 입력해주세요.");
+    return;
+  }
+
+  currentPost.comments[index].text = newText.trim();
+  savePosts();
+  renderComments();
+  showToast("댓글 수정 완료");
+}
+
+function openPage(title){
+  document.getElementById("pageTitle").textContent = title;
+
+  if(title === "제보하기"){
+    document.getElementById("pageText").innerHTML = `
+      <div class="report-card">
+        <div class="report-head">
+          <div>
+            <span class="html-badge">HTML FORM</span>
+            <h2>새로운 시비 제보하기</h2>
+            <p>사람들이 투표할 수 있게 상황과 선택지를 입력해주세요.</p>
+          </div>
+          <div class="report-step">1 / 1</div>
+        </div>
+
+        <div class="report-grid">
+          <div class="form-group">
+            <label>카테고리</label>
+            <select id="reportCategory">
+              <option>교통</option>
+              <option>연애</option>
+              <option>가족</option>
+              <option>직장</option>
+              <option>이웃</option>
+              <option>사회</option>
+              <option>사건</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>제목</label>
+            <input id="reportTitle" placeholder="예: 남사친과 단둘이 술 마신 여자친구" maxlength="60">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>상황 설명</label>
+          <textarea id="reportStory" placeholder="상황을 자세히 적어주세요."></textarea>
+        </div>
+        <div class="upload-box">
+  <div class="upload-title">증거 자료 첨부</div>
+  <div class="upload-desc">
+    사진, 녹음파일, 동영상을 첨부할 수 있습니다. 파일은 데모용으로 브라우저에 임시 저장됩니다.
+  </div>
+
+  <label for="reportFiles" class="file-label">파일 선택하기</label>
+  <input 
+    type="file" 
+    id="reportFiles" 
+    class="file-input" 
+    accept="image/*,audio/*,video/*" 
+    multiple 
+    onchange="handleFiles(this)"
+  >
+
+  <div id="fileList" class="file-list"></div>
+</div>
+
+        <div class="choice-card-wrap">
+          <div class="choice-card">
+            <span class="choice-badge">A 선택지</span>
+            <input id="reportA" placeholder="예: 여자친구가 배려 부족">
+          </div>
+
+          <div class="choice-card">
+            <span class="choice-badge dark">B 선택지</span>
+            <input id="reportB" placeholder="예: 남자친구가 예민함">
+          </div>
+        </div>
+
+        <div class="report-bottom">
+          <div class="report-guide">등록된 글은 투표 전까지 득표율과 댓글이 숨겨집니다.</div>
+          <button class="submit-report" onclick="submitReport()">제보 등록하기</button>
+        </div>
+      </div>
+    `;
+  } else if(title === "검색"){
+    document.getElementById("pageText").innerHTML = `
+      <div class="search-page">
+
+      <div class="page-hero">
+  <span class="page-badge">SEARCH</span>
+  <h2>궁금한 논쟁을 찾아보세요</h2>
+  <p>키워드로 교통, 연애, 사회 이슈를 빠르게 검색할 수 있습니다.</p>
+</div>
+        <div class="search-header">
+  <input 
+    id="searchInput"
+    class="real-search" 
+    placeholder="갈등, 사건, 키워드를 검색해보세요"
+    onkeydown="if(event.key === 'Enter') searchPosts()"
+  >
+  <button class="search-btn" onclick="searchPosts()">검색</button>
+</div>
+
+<div id="searchResultArea"></div>
+
+        <div class="keyword-wrap">
+          <div class="keyword-title">실시간 인기 키워드</div>
+         <div class="keyword-list">
+  <button onclick="searchKeyword('남녀갈등')"># 남녀갈등</button>
+  <button onclick="searchKeyword('민식이법')"># 민식이법</button>
+  <button onclick="searchKeyword('주차시비')"># 주차시비</button>
+  <button onclick="searchKeyword('연애')"># 연애논쟁</button>
+  <button onclick="searchKeyword('부자증세')"># 부자증세</button>
+  <button onclick="searchKeyword('층간소음')"># 층간소음</button>
+  <button onclick="searchKeyword('직장')"># 직장갑질</button>
+</div>
+        </div>
+
+        <div class="search-recent">
+          <div class="keyword-title">최근 많이 본 논쟁</div>
+          <div class="mini-card"><span>연애</span>남사친과 단둘이 술 마신 여자친구</div>
+          <div class="mini-card"><span>교통</span>깜빡이 없이 끼어든 차</div>
+          <div class="mini-card"><span>직장</span>퇴근 직전 업무 지시한 상사</div>
+        </div>
+      </div>
+    `;
+  } else if(title === "인기논쟁"){
+    document.getElementById("pageText").innerHTML = `
+      <div class="list-page">
+
+      <div class="page-hero">
+  <span class="page-badge">HOT ISSUE</span>
+  <h2>지금 가장 뜨거운 논쟁</h2>
+  <p>참여자가 많은 시비부터 빠르게 확인해보세요.</p>
+</div>
+        ${posts.map((p,i)=>`
+          <article class="list-card" onclick="openDetail(${i})">
+            <div class="list-top">
+              <span class="badge">${p.badge}</span>
+              <span class="list-rank">TOP ${i+1}</span>
+            </div>
+
+            <h3>${p.title}</h3>
+            <p>${p.story}</p>
+
+            <div class="list-meta">
+  ${p.votes}명 참여
+</div>
+          </article>
+        `).join("")}
+      </div>
+    `;
+  } else if(title === "최신투표"){
+    document.getElementById("pageText").innerHTML = `
+      <div class="list-page">
+
+      <div class="page-hero">
+  <span class="page-badge">NEW VOTE</span>
+  <h2>방금 올라온 투표</h2>
+  <p>새로운 갈등과 사건을 가장 먼저 판결해보세요.</p>
+</div>
+        ${posts.map((p,i)=>`
+          <article class="list-card" onclick="openDetail(${i})">
+            <div class="list-top">
+              <span class="badge">${p.badge}</span>
+              <span class="list-time">${p.time}</span>
+            </div>
+
+            <h3>${p.title}</h3>
+            <p>${p.story}</p>
+
+            <div class="list-meta">
+  댓글 ${p.comments.length}개
+</div>
+          </article>
+        `).join("")}
+      </div>
+    `;
+  } else if(title === "랭킹"){
+    document.getElementById("pageText").innerHTML = `
+      <div class="ranking-page">
+
+      <div class="page-hero">
+  <span class="page-badge">RANKING</span>
+  <h2>실시간 시비 랭킹</h2>
+  <p>사람들이 가장 많이 반응한 논쟁 순위입니다.</p>
+</div>
+        ${posts.map((p,i)=>`
+          <div class="ranking-item" onclick="openDetail(${i})">
+            <div class="ranking-number">${i+1}</div>
+
+            <div class="ranking-content">
+              <div class="ranking-title">${p.title}</div>
+              <div class="ranking-info">
+                ${p.votes}명 참여 · 댓글 ${p.comments.length}개
+              </div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }   else if(title === "마이페이지"){
+    const myComments = [];
+
+    posts.forEach(post=>{
+      post.comments.forEach(comment=>{
+        if(typeof comment !== "string" && comment.mine){
+          myComments.push({
+            postTitle: post.title,
+            postBadge: post.badge,
+            text: comment.text,
+            likes: comment.likes || 0
+          });
+        }
+      });
+    });
+const myPosts = posts
+  .map((post,index)=> ({...post, realIndex:index}))
+  .filter(post => post.mine);
+    document.getElementById("pageText").innerHTML = `
+      <div class="mypage">
+
+        <div class="page-hero">
+          <span class="page-badge">MY PAGE</span>
+          <h2>나의 시시비비 활동</h2>
+          <p>내가 참여한 판결과 남긴 댓글을 한눈에 확인할 수 있습니다.</p>
+        </div>
+
+        <div class="my-stats">
+          <div>
+            <strong>${Object.keys(voted).length}</strong>
+            <span>참여한 판결</span>
+          </div>
+          <div>
+            <strong>${myComments.length}</strong>
+            <span>내 댓글</span>
+          </div>
+          <div>
+            <strong>${Object.keys(likedComments).length}</strong>
+            <span>누른 좋아요</span>
+          </div>
+        </div>
+
+        <div class="my-section">
+          <div class="keyword-title">내가 남긴 댓글</div>
+
+          ${
+            myComments.length
+            ? myComments.map(c=>`
+              <div class="my-comment-card">
+                <div class="my-comment-topic">${c.postBadge} ${c.postTitle}</div>
+                <p>${c.text}</p>
+                <div class="my-comment-meta">좋아요 ${c.likes}개</div>
+              </div>
+            `).join("")
+            : `
+              <div class="empty-box">
+                아직 작성한 댓글이 없습니다.<br>
+                투표 후 댓글을 남기면 여기에 표시됩니다.
+              </div>
+            `
+          }
+        </div>
+        <div class="my-section">
+          <div class="keyword-title">내가 제보한 글</div>
+
+          ${
+            myPosts.length
+            ? myPosts.map(p=>`
+              <div class="my-comment-card">
+                <div class="my-comment-topic">${p.badge} ${p.title}</div>
+                <p>${p.story}</p>
+                <div class="my-comment-meta">
+                  ${p.votes}명 참여 · 댓글 ${p.comments.length}개 · 조회 ${p.views || 0}
+                </div>
+
+                <div class="comment-actions">
+                  <button onclick="openEditPost(${p.realIndex})">수정</button>
+                  <button onclick="deleteMyPost(${p.realIndex})">삭제</button>
+                </div>
+              </div>
+            `).join("")
+            : `
+              <div class="empty-box">
+                아직 제보한 글이 없습니다.<br>
+                제보하기를 통해 첫 번째 시비를 등록해보세요.
+              </div>
+            `
+          }
+        </div>
+        <div class="my-section">
+          <div class="keyword-title">내가 참여한 판결</div>
+
+          ${
+            Object.keys(voted).length
+            ? Object.keys(voted).map(title=>`
+              <div class="mini-card">
+                <span>판결 완료</span>${title}
+              </div>
+            `).join("")
+            : `
+              <div class="empty-box">
+                아직 참여한 판결이 없습니다.
+              </div>
+            `
+          }
+        </div>
+
+      </div>
+    `;
+  } else {
+    document.getElementById("pageText").textContent = "준비 중인 화면입니다.";
+  }
+
+  showScreen("pageScreen");
+}
+function searchKeyword(keyword){
+  const input = document.getElementById("searchInput");
+  if(input){
+    input.value = keyword;
+    searchPosts();
+  }
+}
+
+function searchPosts(){
+  const input = document.getElementById("searchInput");
+  const area = document.getElementById("searchResultArea");
+
+  if(!input || !area) return;
+
+  const keyword = input.value.trim().toLowerCase();
+
+  if(!keyword){
+    area.innerHTML = `
+      <div class="empty-box">
+        검색어를 입력해주세요.
+      </div>
+    `;
+    return;
+  }
+
+  const results = posts.filter(post=>{
+    return (
+      post.title.toLowerCase().includes(keyword) ||
+      post.story.toLowerCase().includes(keyword) ||
+      post.category.toLowerCase().includes(keyword) ||
+      post.badge.toLowerCase().includes(keyword)
+    );
+  });
+
+  area.innerHTML = `
+    <div class="keyword-title">검색 결과 ${results.length}개</div>
+
+    ${
+      results.length
+      ? results.map(post=>`
+        <article class="list-card" onclick="openDetail(${posts.indexOf(post)})">
+          <div class="list-top">
+            <span class="badge">${post.badge}</span>
+            <span class="list-time">${post.time}</span>
+          </div>
+
+          <h3>${post.title}</h3>
+          <p>${post.story}</p>
+
+          <div class="list-meta">
+            ${post.votes}명 참여 · 댓글 ${post.comments.length}개 · 조회 ${post.views || 0}
+          </div>
+        </article>
+      `).join("")
+      : `
+        <div class="empty-box">
+          검색 결과가 없습니다.<br>
+          다른 키워드로 검색해보세요.
+        </div>
+      `
+    }
+  `;
+}
+function openEditPost(index){
+  const post = posts[index];
+
+  if(!post || !post.mine){
+    showToast("내가 제보한 글만 수정할 수 있습니다.");
+    return;
+  }
+
+  document.getElementById("pageTitle").textContent = "제보 글 수정";
+
+  document.getElementById("pageText").innerHTML = `
+    <div class="report-card">
+      <div class="report-head">
+        <div>
+          <span class="html-badge">EDIT POST</span>
+          <h2>제보 글 수정하기</h2>
+          <p>투표 공정성을 위해 A/B 선택지는 수정할 수 없습니다.</p>
+        </div>
+        <div class="report-step">수정</div>
+      </div>
+
+      <div class="form-group">
+        <label>제목</label>
+        <input id="editPostTitle" value="${post.title.replace(/"/g, "&quot;")}" maxlength="60">
+      </div>
+
+      <div class="form-group">
+        <label>상황 설명</label>
+        <textarea id="editPostStory">${post.story}</textarea>
+      </div>
+
+      <div class="choice-card-wrap">
+        <div class="choice-card">
+          <span class="choice-badge">A 선택지</span>
+          <input value="${post.a.replace(/"/g, "&quot;")}" disabled>
+        </div>
+
+        <div class="choice-card">
+          <span class="choice-badge dark">B 선택지</span>
+          <input value="${post.b.replace(/"/g, "&quot;")}" disabled>
+        </div>
+      </div>
+
+      <div class="empty-box" style="margin-top:16px;">
+        선택지는 투표 기준이기 때문에 수정할 수 없습니다.
+      </div>
+
+      <div class="report-bottom">
+        <div class="report-guide">제목과 상황 설명만 수정됩니다.</div>
+        <button class="submit-report" onclick="saveEditPost(${index})">수정 완료</button>
+      </div>
+    </div>
+  `;
+
+  showScreen("pageScreen");
+}
+
+function saveEditPost(index){
+  const post = posts[index];
+
+  if(!post || !post.mine){
+    showToast("내가 제보한 글만 수정할 수 있습니다.");
+    return;
+  }
+
+  const newTitle = document.getElementById("editPostTitle").value.trim();
+  const newStory = document.getElementById("editPostStory").value.trim();
+
+  if(!newTitle || !newStory){
+    showToast("제목과 상황 설명을 입력해주세요.");
+    return;
+  }
+
+  const oldTitle = post.title;
+
+  post.title = newTitle;
+  post.story = newStory;
+
+  // 제목을 수정해도 기존 투표 기록이 끊기지 않게 처리
+  if(voted[oldTitle]){
+    voted[newTitle] = voted[oldTitle];
+    delete voted[oldTitle];
+    saveVotes();
+  }
+
+  savePosts();
+  renderFeed(currentCategory);
+  renderRank();
+
+  showToast("제보 글이 수정되었습니다.");
+  openPage("마이페이지");
+}
+
+function deleteMyPost(index){
+  const post = posts[index];
+
+  if(!post || !post.mine){
+    showToast("내가 제보한 글만 삭제할 수 있습니다.");
+    return;
+  }
+
+  const ok = confirm("이 글을 삭제하시겠습니까? 삭제하면 복구할 수 없습니다.");
+
+  if(!ok) return;
+
+  if(voted[post.title]){
+    delete voted[post.title];
+    saveVotes();
+  }
+
+  posts.splice(index,1);
+
+  savePosts();
+  renderFeed(currentCategory);
+  renderRank();
+
+  showToast("제보 글이 삭제되었습니다.");
+  openPage("마이페이지");
+}
+function readFileAsDataURL(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+
+    reader.onload = ()=>{
+      resolve({
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        dataUrl: reader.result
+      });
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleFiles(input){
+  const files = Array.from(input.files);
+  const maxSize = 5 * 1024 * 1024;
+
+  for(const file of files){
+    if(file.size > maxSize){
+      showToast("5MB 이하 파일만 첨부할 수 있습니다.");
+      continue;
+    }
+
+    if(
+      !file.type.startsWith("image/") &&
+      !file.type.startsWith("audio/") &&
+      !file.type.startsWith("video/")
+    ){
+      showToast("사진, 오디오, 동영상만 첨부할 수 있습니다.");
+      continue;
+    }
+
+    const fileData = await readFileAsDataURL(file);
+    selectedFiles.push(fileData);
+  }
+
+  renderSelectedFiles();
+  input.value = "";
+}
+
+function renderSelectedFiles(){
+  const fileList = document.getElementById("fileList");
+  if(!fileList) return;
+
+  fileList.innerHTML = selectedFiles.map((file,index)=>`
+    <div class="file-chip">
+      <span>${file.name}</span>
+      <button onclick="removeSelectedFile(${index})">×</button>
+    </div>
+  `).join("");
+}
+
+function removeSelectedFile(index){
+  selectedFiles.splice(index,1);
+  renderSelectedFiles();
+}
+
+function submitReport(){
+  const category = document.getElementById("reportCategory").value;
+  const title = document.getElementById("reportTitle").value.trim();
+  const story = document.getElementById("reportStory").value.trim();
+  const a = document.getElementById("reportA").value.trim();
+  const b = document.getElementById("reportB").value.trim();
+
+  if(!title || !story || !a || !b){
+    showToast("모든 항목을 입력해주세요.");
+    return;
+  }
+
+  const newPost = {
+    category: category,
+    badge: category,
+    time: "방금 전",
+    votes: "0",
+    title: title,
+    story: story,
+    a: a,
+    b: b,
+    ra: 50,
+    rb: 50,
+    comments: [],
+    attachments: selectedFiles,
+    mine: true,
+    views: 0,
+    createdAt: Date.now()
+  };
+
+  posts.unshift(newPost);
+  selectedFiles = [];
+  savePosts();
+  renderFeed("전체");
+  renderRank();
+  showToast("제보가 등록되었습니다.");
+  goHome();
+}
+ 
+function setTab(btn,name){
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+
+  currentSort = name;
+  renderFeed(currentCategory);
+
+  showToast(name + " 정렬");
+}
+
+function goHome(){
+  showScreen("homeScreen");
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+
+function showToast(msg){
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),1400);
+}
+
+loadPosts();
+init();
+</script>
+
+</body>
+</html>
