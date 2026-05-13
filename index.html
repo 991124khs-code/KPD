@@ -1354,27 +1354,11 @@
   font-size:18px;
 }
     }
- /* 최종 모바일 로고 수정 */
+/* 최종 모바일 로고 수정 */
 @media(max-width:1000px){
-  .nav-inner{
-    height:57px !important;
-    padding:0 12px !important;
-  }
-
   .logo-overlap{
     min-width:255px !important;
     height:57px !important;
-    display:flex !important;
-    align-items:center !important;
-    position:relative !important;
-  }
-
-  .logo-symbol{
-    width:42px !important;
-    height:42px !important;
-    left:0 !important;
-    top:50% !important;
-    transform:translateY(-50%) !important;
   }
 
   .logo-overlap .logo-text{
@@ -1382,37 +1366,41 @@
     display:flex !important;
     flex-direction:row !important;
     align-items:center !important;
-    justify-content:flex-start !important;
     gap:8px !important;
   }
 
   .logo-overlap .logo-text strong{
-    font-size:37px !important;
+    font-size:34px !important;
     font-weight:1000 !important;
-    letter-spacing:-3px !important;
+    letter-spacing:-2.6px !important;
     line-height:1 !important;
     color:#111 !important;
     -webkit-text-stroke:0 !important;
-    text-shadow:none !important;
-    transform:scaleX(1.16) !important;
+    text-shadow:
+      0.45px 0 #111,
+      -0.45px 0 #111,
+      0 0.45px #111,
+      0 -0.45px #111 !important;
+    transform:scaleX(1.1) !important;
     transform-origin:left center !important;
-    font-family:Impact, Arial Black, sans-serif !important;
   }
 
   .logo-overlap .logo-text strong span{
     color:#e53935 !important;
-    -webkit-text-stroke:0 !important;
-    text-shadow:none !important;
+    text-shadow:
+      0.45px 0 #e53935,
+      -0.45px 0 #e53935,
+      0 0.45px #e53935,
+      0 -0.45px #e53935 !important;
   }
 
   .logo-overlap .logo-text small{
-    display:inline-block !important;
     font-size:10px !important;
     font-weight:900 !important;
     color:#666 !important;
     white-space:nowrap !important;
     letter-spacing:-0.6px !important;
-    margin-top:6px !important;
+    margin-top:5px !important;
     margin-left:6px !important;
   }
 }
